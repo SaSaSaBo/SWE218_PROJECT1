@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:note_application/screens/noteEditor.dart';
+import 'package:note_application/screens/noteReader.dart';
+
+import '../widgets/note_card.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -11,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 } // StatefulWidget
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,7 +36,7 @@ class _HomeScreenState extends State<HomeScreen> {
               fontWeight: FontWeight.bold, 
               fontSize: 22,),
               ),
-              const SizedBox(height: 20.0,);
+              const SizedBox(height: 20.0,),
               
               Expanded(
                 child: StreamBuilder<QuerySnapshot>(
@@ -43,11 +47,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     }
                     if(snapshot.hasData){
                       return GridView(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-                      children: snapshot.data!docs
-                      .map((note) => noteCard((){
+                      children: [
+                        snapshot.data!docs.map((note) => noteCard((){
                         Navigator.push(context, MaterialPageRoute(builder: (context) => NoteReaderScreen(note),));
                       }, note))
                       .toList(),
+                      ],
                       );
                     }
                   return Text("There's no Notes", style: GoogleFonts.nunito(color: Colors.black),);
